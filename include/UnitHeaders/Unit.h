@@ -1,7 +1,11 @@
 #pragma once
 #include <string>
-
+#include "Position.h"
 class Unit {
+// ideal map ranges:
+// Tactical: 5000 times 5000
+// Operational: 10000x10000
+// Strategic: 50000x25000
 protected:
     std::string name;
     // range from 0-100, in percent
@@ -16,6 +20,8 @@ protected:
     int health;
     int antiPersonnelFirepower;
     int antiArmorFirepower;
+    int antiAirFirepower;
+    int defense;
 
     int speed;
     
@@ -41,31 +47,86 @@ protected:
     int tanks;
     int trucks;
     int personnelEquipment;
+    
+
+    // positional stuff
+    int engagementRange;
+    Position position;
+    
 
 public:
-    Unit(std::string name, int org, int morale, int fuel, int ammunition, 
-        int supply, int entrench, int hardness, int health, int softAttack, 
-        int hardAttack, int speed, int experience, int training, 
-        int fuelConsumption, int ammunitionConsumption, int discipline, 
-        int fatigue, int willpower, int manpower, int smallArms, int artillery,
-        int apcs, int ifvs, int antitank, int antiair, int tanks, int trucks,
-        int personnelEquipment)
-        : name(name), organization(org), morale(morale), supply(supply), 
-            fuel(fuel), ammunition(ammunition), entrenchment(entrenchment),
-            hardness(hardness), health(health), 
-            antiPersonnelFirepower(softAttack), antiArmorFirepower(hardAttack),
-            speed(speed), experience(experience), training(training), 
+    Unit(std::string name, 
+        int org, 
+        int morale, 
+        int fuel, 
+        int ammunition, 
+        int supply, 
+        int entrench, 
+        int hardness, 
+        int health, 
+        int softAttack, 
+        int hardAttack, 
+        int antiAirFirepower,
+        int defense, 
+        int speed, 
+        int experience, 
+        int training, 
+        int fuelConsumption, 
+        int ammunitionConsumption, 
+        int discipline, 
+        int fatigue, 
+        int willpower, 
+        int manpower, 
+        int smallArms, 
+        int artillery,
+        int apcs, 
+        int ifvs, 
+        int antitank, 
+        int antiair, 
+        int tanks, 
+        int trucks,
+        int personnelEquipment, 
+        int engagementRange, 
+        Position position)
+        : name(name), 
+            organization(org), 
+            morale(morale), 
+            supply(supply), 
+            fuel(fuel), 
+            ammunition(ammunition), 
+            entrenchment(entrenchment),
+            hardness(hardness), 
+            health(health), 
+            antiPersonnelFirepower(softAttack), 
+            antiArmorFirepower(hardAttack),
+            antiAirFirepower(antiAirFirepower),
+            defense(defense),
+            speed(speed), 
+            experience(experience), 
+            training(training), 
             fuelConsumption(fuelConsumption), 
             ammunitionConsumption(ammunitionConsumption), 
-            discipline(discipline), fatigue(fatigue), willpower(willpower),
-            manpower(manpower), smallArms(smallArms), artillery(artillery),
-            apcs(apcs), ifvs(ifvs), antitank(antitank), antiair(antiair),
-            tanks(tanks), trucks(trucks), 
-            personnelEquipment(personnelEquipment) {}
+            discipline(discipline), 
+            fatigue(fatigue), 
+            willpower(willpower),
+            manpower(manpower), 
+            smallArms(smallArms), 
+            artillery(artillery),
+            apcs(apcs), 
+            ifvs(ifvs), 
+            antitank(antitank), 
+            antiair(antiair),
+            tanks(tanks), 
+            trucks(trucks), 
+            personnelEquipment(personnelEquipment), 
+            engagementRange(engagementRange), 
+            position(position) {}
 
     virtual ~Unit() = default;
 
-    virtual void move() = 0;
+    const Position& getPosition() const { return position; }
+    void setPosition(int x, int y) { position = Position(x, y); }
+    virtual void move(int dx, int dy) { position.move(dx, dy); }
     virtual void attack(Unit& target) = 0;
     virtual void takeDamage(int damage);
     bool isAlive() const { return health > 0; }
@@ -122,7 +183,7 @@ public:
     void setAmmunitionConsumption(int ammunitionConsumption) {
         this->ammunitionConsumption = ammunitionConsumption;
     }
-    void setDiscipline(int discipline) { this->discipline = discipline; }
+    void setDiscipline(int discipline) { this->discipline = discipline; } 
     void setSmallArms(int smallArms) { this->smallArms = smallArms; }
     void setArtillery(int artillery) { this->artillery = artillery; }
     void setAPCs(int apcs) { this->apcs = apcs; }

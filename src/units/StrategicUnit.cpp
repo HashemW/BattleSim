@@ -1,5 +1,5 @@
 // src/units/StrategicUnit.cpp
-#include "headers/StrategicUnit.h"
+#include "../../include/UnitHeaders/StrategicUnit.h"
 
 // Implementation of move behavior
 void StrategicUnit::move() {
